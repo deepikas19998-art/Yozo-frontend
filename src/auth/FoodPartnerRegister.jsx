@@ -1,8 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/auth-shared.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const FoodPartnerRegister = () => {
   const navigate = useNavigate();
@@ -51,7 +48,14 @@ const FoodPartnerRegister = () => {
           <strong style={{fontWeight:600}}>Switch:</strong> <Link to="/user/register">User</Link> • <Link to="/food-partner/register">Food partner</Link>
         </nav>
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
-          {/* form fields */}
+          {/* Form fields added here */}
+          <input type="text" name="businessName" placeholder="Business Name" required />
+          <input type="text" name="contactName" placeholder="Contact Name" required />
+          <input type="text" name="phone" placeholder="Phone" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input type="password" name="password" placeholder="Password" required />
+          <input type="text" name="address" placeholder="Address" required />
+
           <button className="auth-submit" type="submit">Create Partner Account</button>
         </form>
         <div className="auth-alt-action">
