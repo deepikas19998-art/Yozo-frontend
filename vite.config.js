@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://foodreels0.onrender.com",
+        target: "https://yozo-backend.onrender.com",
         changeOrigin: true,
         secure: false,
       },
