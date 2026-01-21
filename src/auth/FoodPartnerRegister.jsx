@@ -29,7 +29,7 @@ const FoodPartnerRegister = () => {
       );
 
       console.log(response.data);
-      navigate("/create-food"); // Redirect after successful registration
+      navigate("/food-partner/login"); // Redirect after successful registration
 
     } catch (error) {
       console.error("There was an error registering!", error.response?.data || error);

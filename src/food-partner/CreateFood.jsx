@@ -63,7 +63,7 @@ const CreateFood = () => {
     );
 
     console.log(response.data);
-    navigate("/"); // Redirect after successful food creation
+    navigate("/saved"); // Redirect after successful food creation
 
   } catch (error) {
     console.error("Error creating food:", error.response?.data || error);
