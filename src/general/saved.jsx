@@ -5,19 +5,21 @@ import ReelFeed from '../components/ReelFeed';
 
 const Saved = () => {
   const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null);     // Error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchSavedFoods = async () => {
       try {
         setLoading(true);
+
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/food/save`,
           { withCredentials: true }
         );
 
-        const savedFoods = response.data.savedFoods.map(item => ({
+        // ✅ FIX: Backend ab 200 ke sath [] bhejta hai agar kuch saved nahi
+        const savedFoods = (response.data.savedFoods || []).map(item => ({
           _id: item.food._id,
           video: item.food.video,
           description: item.food.description,
@@ -29,8 +31,11 @@ const Saved = () => {
 
         setVideos(savedFoods);
       } catch (err) {
-        console.error("Error fetching saved foods:", err.response?.data || err);
-        setError("Failed to fetch saved videos.");
+        console.error(
+          'Error fetching saved foods:',
+          err.response?.data || err.message || err
+        );
+        setError('Failed to fetch saved videos. Please login first.');
       } finally {
         setLoading(false);
       }
@@ -39,6 +44,7 @@ const Saved = () => {
     fetchSavedFoods();
   }, []);
 
+  // ✅ FIX: Unsave ke baad item ko list se hata do (filter), sirf count mat ghataao
   const removeSaved = async (item) => {
     try {
       await axios.post(
@@ -47,16 +53,14 @@ const Saved = () => {
         { withCredentials: true }
       );
 
-      setVideos(prev =>
-        prev.map(v =>
-          v._id === item._id
-            ? { ...v, savesCount: Math.max(0, (v.savesCount ?? 1) - 1) }
-            : v
-        )
-      );
+      // Video ko list se remove karo
+      setVideos(prev => prev.filter(v => v._id !== item._id));
     } catch (err) {
-      console.error("Error removing saved food:", err.response?.data || err);
-      alert("Failed to remove saved video");
+      console.error(
+        'Error removing saved food:',
+        err.response?.data || err.message || err
+      );
+      alert('Failed to remove saved video');
     }
   };
 
@@ -69,8 +73,9 @@ const Saved = () => {
   }
 
   return (
+    // ✅ FIX: "videos" nahi, "items" prop chahiye ReelFeed ko
     <ReelFeed
-      videos={videos}          // prop name consistent with ReelFeed
+      items={videos}
       onSave={removeSaved}
       emptyMessage="No saved videos yet."
     />

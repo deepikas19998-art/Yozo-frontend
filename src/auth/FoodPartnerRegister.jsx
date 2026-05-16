@@ -4,7 +4,7 @@ import axios from "axios";
 const FoodPartnerRegister = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const businessName = e.target.businessName.value;
@@ -15,7 +15,7 @@ const FoodPartnerRegister = () => {
     const address = e.target.address.value;
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/food-partner/register`,
         {
           name: businessName,
@@ -28,40 +28,58 @@ const FoodPartnerRegister = () => {
         { withCredentials: true }
       );
 
-      console.log(response.data);
-      navigate("/food-partner/login"); // Redirect after successful registration
+      navigate("/food-partner/login");
 
     } catch (error) {
-      console.error("There was an error registering!", error.response?.data || error);
       alert(error.response?.data?.message || "Registration failed");
     }
   };
 
   return (
     <div className="auth-page-wrapper">
-      <div className="auth-card" role="region" aria-labelledby="partner-register-title">
-        <header>
-          <h1 id="partner-register-title" className="auth-title">Partner sign up</h1>
-          <p className="auth-subtitle">Grow your business with our platform.</p>
-        </header>
-        <nav className="auth-alt-action" style={{marginTop: '-4px'}}>
-          <strong style={{fontWeight:600}}>Switch:</strong> <Link to="/user/register">User</Link> • <Link to="/food-partner/register">Food partner</Link>
-        </nav>
-        <form className="auth-form" onSubmit={handleSubmit} noValidate>
-          {/* Form fields added here */}
-          <input type="text" name="businessName" placeholder="Business Name" required />
-          <input type="text" name="contactName" placeholder="Contact Name" required />
-          <input type="text" name="phone" placeholder="Phone" required />
-          <input type="email" name="email" placeholder="Email" required />
-          <input type="password" name="password" placeholder="Password" required />
-          <input type="text" name="address" placeholder="Address" required />
 
-          <button className="auth-submit" type="submit">Create Partner Account</button>
-        </form>
-        <div className="auth-alt-action">
-          Already a partner? <Link to="/food-partner/login">Sign in</Link>
+      <div className="auth-card">
+
+        <header>
+          <h1 className="auth-title">Partner Registration</h1>
+          <p className="auth-subtitle">
+            Start selling food and grow your business 🚀
+          </p>
+        </header>
+
+        <div className="auth-switch">
+          <span>Switch:</span>
+          <Link to="/user/register">User</Link>
+          <span>•</span>
+          <Link to="/food-partner/register">Partner</Link>
         </div>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+
+          <input name="businessName" placeholder="Business name" required />
+
+          <input name="contactName" placeholder="Contact person name" required />
+
+          <input name="phone" placeholder="Phone number" required />
+
+          <input type="email" name="email" placeholder="Email address" required />
+
+          <input type="password" name="password" placeholder="Password" required />
+
+          <input name="address" placeholder="Full business address" required />
+
+          <button type="submit" className="primary-btn">
+            Create Partner Account
+          </button>
+
+        </form>
+
+        <p className="auth-footer">
+          Already a partner? <Link to="/food-partner/login">Sign in</Link>
+        </p>
+
       </div>
+
     </div>
   );
 };

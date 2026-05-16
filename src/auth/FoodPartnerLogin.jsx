@@ -1,55 +1,71 @@
 import React from 'react';
-import "../styles/auth-shared.css";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import "../styles/auth-shared.css";
 
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const email = e.target.email.value;
     const password = e.target.password.value;
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/food-partner/login`,
-        { email, password },         // payload must match backend
-        { withCredentials: true }    // cookie-based auth
+        { email, password },
+        { withCredentials: true }
       );
 
-      console.log(response.data);
-      navigate("/create-food");      // Redirect after successful login
+      navigate("/create-food");
 
     } catch (error) {
-      console.error("Login failed:", error.response?.data || error);
       alert(error.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="auth-page-wrapper">
-      <div className="auth-card" role="region" aria-labelledby="partner-login-title">
+
+      <div className="auth-card">
+
         <header>
-          <h1 id="partner-login-title" className="auth-title">Partner login</h1>
-          <p className="auth-subtitle">Access your dashboard and manage orders.</p>
+          <h1 className="auth-title">Partner Login</h1>
+          <p className="auth-subtitle">
+            Manage your restaurant & orders 🍽️
+          </p>
         </header>
-        <form className="auth-form" onSubmit={handleSubmit} noValidate>
-          <div className="field-group">
-            <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="business@example.com" autoComplete="email" />
-          </div>
-          <div className="field-group">
-            <label htmlFor="password">Password</label>
-            <input id="password" name="password" type="password" placeholder="Password" autoComplete="current-password" />
-          </div>
-          <button className="auth-submit" type="submit">Sign In</button>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Business email"
+            required
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+
+          <button type="submit" className="primary-btn">
+            Sign In
+          </button>
+
         </form>
-        <div className="auth-alt-action">
-          New partner? <a href="/food-partner/register">Create an account</a>
+
+        <div className="auth-footer">
+          New partner? <Link to="/food-partner/register">Create account</Link>
         </div>
+
       </div>
+
     </div>
   );
 };
